@@ -11,8 +11,11 @@ class MH_Lexer extends GenLexer implements LEX_TOKEN_STREAM {
 
 static class VarAcceptor extends Acceptor implements DFA {
     // add code here
+    // start = 0
+    // accepting = 1
+    // dead = 2
     public String lexClass() { return "VAR"; } ;
-    public int numberOfStates() { return 3 ; } ;
+    public int numberOfStates() { return 3; } ;
 
     int next (int state, char c) {
         switch (state) {
@@ -28,7 +31,19 @@ static class VarAcceptor extends Acceptor implements DFA {
 
 static class NumAcceptor extends Acceptor implements DFA {
     // add code here
-    public
+    // start = 0
+    // accepting = 1 and 2
+    // dead = 3
+    public String lexClass() { return "NUM"; } ;
+    public int numberOfStates() { return 4; } ;
+
+    int next (int state, char c) {
+        switch (state) {
+            case 0: if (c == '0') return 1; else if (CharTypes.isDigit(c) && (c != 0)) return 2;
+            case 1: 
+        }
+    }
+
 }
 
 static class BooleanAcceptor extends Acceptor implements DFA {
