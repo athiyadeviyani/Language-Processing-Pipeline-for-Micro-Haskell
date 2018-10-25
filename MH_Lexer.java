@@ -116,6 +116,24 @@ static class WhitespaceAcceptor extends Acceptor implements DFA {
 
 static class CommentAcceptor extends Acceptor implements DFA {
     // add code here
+    // start = 0
+    // accepting = 2, 3
+    // dead = 4
+    public String lexClass() { return ""; };
+    public int numberOfStates() { return 5; };
+
+    int next (int state, char c) {
+        switch (state) {
+            case 0: if (c == '-') return 1; else return 4;
+            case 1: if (c == '-') return 2; else return 4;
+            case 2: if (c == '-') return 2; else if (!CharTypes.isSymbolic(c) || !CharTypes.isNewline(c)) return 3; return 4;
+            case 3: if (!CharTypes.isNewline(c)) return 3; return 4;
+            default: return 4;
+        }
+    }
+
+    boolean accepting (int state) {return (state == 2 || state == 3);}
+    int dead() {return 4;}
 }
 
 static class TokAcceptor extends Acceptor implements DFA {
@@ -125,10 +143,42 @@ static class TokAcceptor extends Acceptor implements DFA {
     TokAcceptor (String tok) {this.tok = tok ; tokLen = tok.length() ;}
     
     // add code here
+    int totalStates = tokLen + 2;
+    int garbageState = tokLen + 1;
+
+    public String lexClass() { return tok; };
+    public int numberOfStates() { return totalStates;};
+
+    int next (int state, char c) {
+        switch (state) {
+            case 0: if (isLetter (c)) return 1; else return garbageState;
+            default: garbageState;
+        }
+    }
+
+    boolean accepting (int state) { return (state == 1); }
+    int dead() {return garbageState;}
+
 }
 
     // add definitions of MH_acceptors here
 
+    static DFA varAcceptor = new VarAcceptor();
+    static DFA numAcceptor = new NumAcceptor();
+    static DFA booleanAcceptor = new BooleanAcceptor();
+    static DFA symAcceptor = new SymAcceptor();
+    static DFA whitespaceAcceptor = new WhitespaceAcceptor();
+    static DFA commentAcceptor = new CommentAcceptor();
+    static DFA tokAcceptor1 = new TokAcceptor("Integer");
+    static DFA tokAcceptor2 = new TokAcceptor("Bool");
+    static DFA tokAcceptor3 = new TokAcceptor("if");
+    static DFA tokAcceptor4 = new TokAcceptor("then");
+    static DFA tokAcceptor5 = new TokAcceptor("else");
+    static DFA tokAcceptor6 = new TokAcceptor("(");
+    static DFA tokAcceptor7 = new TokAcceptor(")");
+    static DFA tokAcceptor8 = new TokAcceptor(";");
+
+    new DFA[] {varAcceptor, numAcceptor, booleanAcceptor, symAcceptor, whitespaceAcceptor, commentAcceptor, tokAcceptor1, tokAcceptor2, tokAcceptor3, tokAcceptor4, tokAcceptor5, tokAcceptor6, tokAcceptor7, tokAcceptor8};
     MH_Lexer (Reader reader) {
 	super(reader,MH_acceptors) ;
     }
