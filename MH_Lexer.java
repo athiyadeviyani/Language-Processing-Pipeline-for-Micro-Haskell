@@ -104,8 +104,8 @@ static class WhitespaceAcceptor extends Acceptor implements DFA {
 
     int next (int state, char c) {
         switch (state) {
-            case 0: if (CharTypes.isWhitespcae(c)) return 1; else return 2;
-            case 1: if (CharTypes.isWhitespcae(c)) return 1; else return 2;
+            case 0: if (CharTypes.isWhitespace(c)) return 1; else return 2;
+            case 1: if (CharTypes.isWhitespace(c)) return 1; else return 2;
             default: return 2;
         }
     }
@@ -146,17 +146,18 @@ static class TokAcceptor extends Acceptor implements DFA {
     int totalStates = tokLen + 2;
     int garbageState = tokLen + 1;
 
-    public String lexClass() { return tok; };
+    public String lexClass() { return this.tok; };
     public int numberOfStates() { return totalStates;};
 
     int next (int state, char c) {
-        switch (state) {
-            case 0: if (isLetter (c)) return 1; else return garbageState;
-            default: garbageState;
+        if (state < tokLen && tok.charAt(state) == c) {
+            return state + 1;
+        } else {
+            return garbageState;
         }
     }
 
-    boolean accepting (int state) { return (state == 1); }
+    boolean accepting (int state) { return (state == tokLen); }
     int dead() {return garbageState;}
 
 }
@@ -178,10 +179,33 @@ static class TokAcceptor extends Acceptor implements DFA {
     static DFA tokAcceptor7 = new TokAcceptor(")");
     static DFA tokAcceptor8 = new TokAcceptor(";");
 
-    new DFA[] {varAcceptor, numAcceptor, booleanAcceptor, symAcceptor, whitespaceAcceptor, commentAcceptor, tokAcceptor1, tokAcceptor2, tokAcceptor3, tokAcceptor4, tokAcceptor5, tokAcceptor6, tokAcceptor7, tokAcceptor8};
+    static DFA[] MH_acceptors = new DFA[] {varAcceptor, numAcceptor, booleanAcceptor, symAcceptor, whitespaceAcceptor, commentAcceptor, tokAcceptor1, tokAcceptor2, tokAcceptor3, tokAcceptor4, tokAcceptor5, tokAcceptor6, tokAcceptor7, tokAcceptor8};
     MH_Lexer (Reader reader) {
 	super(reader,MH_acceptors) ;
     }
 
 }
 
+class LexerDemo {
+	
+    public static void main (String[] args) 
+	throws StateOutOfRange, IOException {
+	BufferedReader consoleReader = new BufferedReader (new InputStreamReader (System.in)) ;
+        while (0==0) {
+	    System.out.print ("Lexer> ") ;
+            String inputLine = consoleReader.readLine() ;
+            Reader lineReader = new BufferedReader (new StringReader (inputLine)) ;
+            GenLexer mhLexer = new MH_Lexer (lineReader) ;
+            try {
+	        LexToken currTok = mhLexer.pullProperToken() ;
+	        while (currTok != null) {
+	            System.out.println (currTok.value() + " \t" + 
+		     		        currTok.lexClass()) ;
+	            currTok = mhLexer.pullProperToken() ;
+                }
+            } catch (LexError x) {
+		System.out.println ("Error: " + x.getMessage()) ;
+            }
+	} 
+    }
+}
