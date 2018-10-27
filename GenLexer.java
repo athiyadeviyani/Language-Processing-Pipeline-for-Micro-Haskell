@@ -333,7 +333,8 @@ class LexerDemo {
 	    System.out.print ("Lexer> ") ;
             String inputLine = consoleReader.readLine() ;
             Reader lineReader = new BufferedReader (new StringReader (inputLine)) ;
-            GenLexer demoLexer = new DemoLexer (lineReader) ;
+          //  GenLexer demoLexer = new DemoLexer (lineReader) ;
+	    GenLexer demoLexer = new MH_Lexer (lineReader);
             try {
 	        LexToken currTok = demoLexer.pullProperToken() ;
 	        while (currTok != null) {
