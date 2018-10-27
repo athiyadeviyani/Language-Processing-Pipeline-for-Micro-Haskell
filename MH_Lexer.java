@@ -59,14 +59,15 @@ static class BooleanAcceptor extends Acceptor implements DFA {
 
     int next (int state, char c) {
         switch (state) {
-            case 0: if (c == 'T') return 1; else if (c == 'F') return 5;
+            case 0: if (c == 'T') return 1; else if (c == 'F') return 5; else return 8;
             case 1: if (c == 'r') return 2; return 8;
             case 2: if (c == 'u') return 3; return 8;
             case 3: if (c == 'e') return 4; return 8;
-            case 4: if (c == 'a') return 6; return 8;
-            case 5: if (c == 'l') return 7; return 8;
-            case 6: if (c == 's') return 3; return 8;
-            default: return 3;
+            case 4: return 8;
+            case 5: if (c == 'a') return 6; return 8;
+            case 6: if (c == 'l') return 7; return 8;
+            case 7: if (c == 's') return 3; return 8;
+            default: return 8;
         }
     }
 
@@ -140,25 +141,32 @@ static class TokAcceptor extends Acceptor implements DFA {
 
     String tok ;
     int tokLen ;
+    
+
+    int i;
+
     TokAcceptor (String tok) {this.tok = tok ; tokLen = tok.length() ;}
     
     // add code here
-    int totalStates = tokLen + 2;
-    int garbageState = tokLen + 1;
+    //int totalStates = tokLen + 2;
+    //int garbageState = tokLen + 1;
 
-    public String lexClass() { return this.tok; };
-    public int numberOfStates() { return totalStates;};
+    public String lexClass() { return tok; };
+    public int numberOfStates() { return tokLen + 2; };
 
     int next (int state, char c) {
-        if (state < tokLen && tok.charAt(state) == c) {
-            return state + 1;
-        } else {
-            return garbageState;
+        if (state < tokLen) {
+            if (c == tok.charAt(state)) {
+                return state + 1;
+            } else {
+                return tokLen + 1;
+            } 
         }
+        return tokLen + 1;
     }
 
     boolean accepting (int state) { return (state == tokLen); }
-    int dead() {return garbageState;}
+    int dead() {return tokLen + 1;}
 
 }
 
@@ -170,42 +178,22 @@ static class TokAcceptor extends Acceptor implements DFA {
     static DFA symAcceptor = new SymAcceptor();
     static DFA whitespaceAcceptor = new WhitespaceAcceptor();
     static DFA commentAcceptor = new CommentAcceptor();
-    static DFA tokAcceptor1 = new TokAcceptor("Integer");
-    static DFA tokAcceptor2 = new TokAcceptor("Bool");
-    static DFA tokAcceptor3 = new TokAcceptor("if");
-    static DFA tokAcceptor4 = new TokAcceptor("then");
-    static DFA tokAcceptor5 = new TokAcceptor("else");
-    static DFA tokAcceptor6 = new TokAcceptor("(");
-    static DFA tokAcceptor7 = new TokAcceptor(")");
-    static DFA tokAcceptor8 = new TokAcceptor(";");
+    static DFA integerAcceptor = new TokAcceptor("Integer");
+    static DFA boolAcceptor = new TokAcceptor("Bool");
+    static DFA ifAcceptor = new TokAcceptor("if");
+    static DFA thenAcceptor = new TokAcceptor("then");
+    static DFA elseAcceptor = new TokAcceptor("else");
+    static DFA openBracketAcceptor = new TokAcceptor("(");
+    static DFA closeBracketAcceptor = new TokAcceptor(")");
+    static DFA semicolonAcceptor = new TokAcceptor(";");
 
-    static DFA[] MH_acceptors = new DFA[] {varAcceptor, numAcceptor, booleanAcceptor, symAcceptor, whitespaceAcceptor, commentAcceptor, tokAcceptor1, tokAcceptor2, tokAcceptor3, tokAcceptor4, tokAcceptor5, tokAcceptor6, tokAcceptor7, tokAcceptor8};
+    static DFA[] MH_acceptors = new DFA[] {ifAcceptor, elseAcceptor, thenAcceptor, integerAcceptor,
+                                            boolAcceptor, booleanAcceptor, numAcceptor, varAcceptor,
+                                            symAcceptor, openBracketAcceptor, closeBracketAcceptor, semicolonAcceptor, 
+                                            whitespaceAcceptor, commentAcceptor};
     MH_Lexer (Reader reader) {
 	super(reader,MH_acceptors) ;
     }
 
 }
 
-class LexerDemo {
-	
-    public static void main (String[] args) 
-	throws StateOutOfRange, IOException {
-	BufferedReader consoleReader = new BufferedReader (new InputStreamReader (System.in)) ;
-        while (0==0) {
-	    System.out.print ("Lexer> ") ;
-            String inputLine = consoleReader.readLine() ;
-            Reader lineReader = new BufferedReader (new StringReader (inputLine)) ;
-            GenLexer mhLexer = new MH_Lexer (lineReader) ;
-            try {
-	        LexToken currTok = mhLexer.pullProperToken() ;
-	        while (currTok != null) {
-	            System.out.println (currTok.value() + " \t" + 
-		     		        currTok.lexClass()) ;
-	            currTok = mhLexer.pullProperToken() ;
-                }
-            } catch (LexError x) {
-		System.out.println ("Error: " + x.getMessage()) ;
-            }
-	} 
-    }
-}
