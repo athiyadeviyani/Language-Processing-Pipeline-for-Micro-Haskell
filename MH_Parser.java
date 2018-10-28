@@ -6,7 +6,6 @@
 
 // PARSE TABLE LINK (read-only, duh): https://drive.google.com/file/d/16_8iqk8rKp8CuaYBxqXFZArM2I73KeOL/view?usp=sharing
 
-
 import java.io.* ;
  
 class MH_Parser extends GenParser implements PARSER {
@@ -224,8 +223,68 @@ class MH_Parser extends GenParser implements PARSER {
                 return null;
             }
         }
-
         
+        if (nonterm.equals("#Exp2")) {
+            if (tokClass.equals("VAR")) {
+                return Exp3_Rest2;
+            } else if (tokClass.equals("NUM")) {
+                return Exp3_Rest2;
+            } else if (tokClass.equals("BOOLEAN")) {
+                return Exp3_Rest2;
+            } else if (tokClass.equals("(")) {
+                return Exp3_Rest2;
+            } else {
+                return null;
+            }
+        }
+
+        if (nonterm.equals("#Rest2")) {
+            if (tokClass.equals("VAR")) {
+                return Exp3_Rest2;
+            } else if (tokClass.equals(";")) {
+                return epsilon;
+            } else if (tokClass.equals("then")) {
+                return epsilon;
+            } else if (tokClass.equals("else")) {
+                return epsilon;
+            } else if (tokClass.equals("==")) {
+                return epsilon;
+            } else if (tokClass.equals("<=")) {
+                return epsilon;
+            } else if (tokClass.equals("+")) {
+                return epsilon;
+            } else if (tokClass.equals("-")) {
+                return epsilon;
+            } else if (tokClass.equals("NUM")) {
+                return Exp3_Rest2;
+            } else if (tokClass.equals("BOOLEAN")) {
+                return Exp3_Rest2;
+            } else if (tokClass.equals("(")) {
+                return Exp3_Rest2;
+            } else if (tokClass.equals(")")) {
+                return epsilon;
+            } else {
+                return null;
+            }
+        }
+
+        if (nonterm.equals("#Exp3")) {
+            if (tokClass.equals("VAR")) {
+                return VAR;
+            } else if (tokClass.equals("NUM")) {
+                return NUM;
+            } else if (tokClass.equals("BOOLEAN")) {
+                return BOOLEAN;
+            } else if (tokClass.equals("(")) {
+                return lbr_Exp_rbr;
+            } else {
+                return null;
+            }
+        }
+
+        else {
+            return null;
+        }
 
     }
 }
