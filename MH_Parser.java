@@ -103,7 +103,7 @@ class MH_Parser extends GenParser implements PARSER {
                 return epsilon;
             } else if (tokClass.equals(")")) {
                 return epsilon;
-            } else if (tokClass.equals(">")) {
+            } else if (tokClass.equals("->")) {
                 return arrow_Type;
             } else {
                 return null;
