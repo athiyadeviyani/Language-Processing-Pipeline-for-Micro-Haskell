@@ -190,7 +190,7 @@ static class TokAcceptor extends Acceptor implements DFA {
                                             symAcceptor, openBracketAcceptor, closeBracketAcceptor, semicolonAcceptor, 
                                             whitespaceAcceptor, commentAcceptor};
     MH_Lexer (Reader reader) {
-	super(reader,MH_acceptors) ;
+    super(reader,MH_acceptors) ;
     }
 
 }
