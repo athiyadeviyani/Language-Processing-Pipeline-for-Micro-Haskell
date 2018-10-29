@@ -43,10 +43,10 @@ class MH_Typechecker {
 			// for + - output is integer
 			// for == <= output is boolean
 			// do it recursively (until you reach a base case)
-			if (computeType(exp.first(), env).equals(IntegerType) && computeType(exp.first(), env).equals(IntegerType)) {
+			if (computeType(exp.first(), env).isInteger() && computeType(exp.first(), env).isInteger()) {
 				if (exp.infixOp().equals("+") || exp.infixOp().equals("-")) {
 					return IntegerType;
-				} else if (exp.infixOp().equals("==") || exp.infixOf().equals("<=")) {
+				} else if (exp.infixOp().equals("==") || exp.infixOp().equals("<=")) {
 					return BoolType;
 				} else {
 					throw new TypeError("Wrong infix operator.");
@@ -58,34 +58,38 @@ class MH_Typechecker {
 
 		else if (exp.isIF()) {
 			// for if the computeType(exp.first(), env) has to be boolean
-			if (computeType(exp.first(), env).equals(BoolType)) {
+			if (computeType(exp.first(), env).isBool()) {
 				// exp.second() and exp.third() must be of the same type
-				if (computeType(exp.second(), env).equals(computeType(exp.third(), env))) {
-					return computeType(exp.second(), env);
+				MH_TYPE then_type = computeType(exp.second(), env);
+				MH_TYPE else_type = computeType(exp.third(), env);
+				
+				if (then_type.equals(else_type)) {
+					return then_type;
 				} else {
-					throw new TypeError("Type of then and else should be the same.")
+					throw new TypeError("Type of then and else should be the same.");
 				}
 			} else {
-				throw new TypeError("If condition should be a boolean.")
+				throw new TypeError("If condition should be a boolean.");
 			}
 			
 		}
 
+
 		else if (exp.isAPP()) {
-			// Find arrow first
-			if (computeType(exp.first(), env).isArrow()) {
+			//Check if it is a function
+			if (computeType(exp.first(), env).isFun()) {
 				// Then compare if the argument type matches the declared type
 				if (computeType(exp.first(), env).left().equals(computeType(exp.second(), env))) {
 					return computeType(exp.first(), env).right();
 				} else {
-					throw new TypeError("Argument type does not match declared type.")
+					throw new TypeError("Argument type does not match declared type.");
 				}
 			} else {
-				throw new TypeError("Arrow expected.")
+				throw new TypeError("Arrow expected.");
 			}
 		}
 
-		return null; 
+		return null;
 
     }
 
