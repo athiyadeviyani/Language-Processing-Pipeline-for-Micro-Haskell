@@ -43,15 +43,39 @@ class MH_Typechecker {
 			// for + - output is integer
 			// for == <= output is boolean
 			// do it recursively (until you reach a base case)
+			if (computeType(exp.first(), env).equals(IntegerType) && computeType(exp.first(), env).equals(IntegerType)) {
+				if (exp.infixOp().equals("+") || exp.infixOp().equals("-")) {
+					return IntegerType;
+				} else if (exp.infixOp().equals("==") || exp.infixOf().equals("<=")) {
+					return BoolType;
+				} else {
+					throw new TypeError ("Wrong infix operator.");
+				}
+			} else {
+				throw new TypeError ("Operation parameters should only be Integers.");
+			}
+		}
+
+		else if (exp.isIF()) {
+			// for if the computeType(exp.first(), env) has to be boolean
+			if (computeType(exp.first(), env).equals(BoolType)) {
+				// exp.second() and exp.third() must be of the same type
+				if (computeType(exp.second(), env).equals(computeType(exp.third(), env))) {
+					return computeType(exp.second(), env);
+				} else {
+					throw new TypeError ("Type of then and else should be the same.")
+				}
+			} else {
+				throw new TypeError ("If condition should be a boolean.")
+			}
+			
 		}
 
 		else if (exp.isAPP()) {
 			// add code here
 		}
 
-		else if (exp.isIF()) {
-			// add code here
-		}
+		
 
     }
 
