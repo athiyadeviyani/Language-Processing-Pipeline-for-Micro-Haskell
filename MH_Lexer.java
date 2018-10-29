@@ -142,9 +142,6 @@ static class TokAcceptor extends Acceptor implements DFA {
     String tok ;
     int tokLen ;
     
-
-    int i;
-
     TokAcceptor (String tok) {this.tok = tok ; tokLen = tok.length() ;}
     
     // add code here
@@ -196,4 +193,3 @@ static class TokAcceptor extends Acceptor implements DFA {
     }
 
 }
-
