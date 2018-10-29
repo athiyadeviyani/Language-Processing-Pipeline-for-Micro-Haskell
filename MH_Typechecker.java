@@ -1,6 +1,4 @@
-
 // File:   MH_Typechecker.java
-// Date:   October 2013
 
 // Java template file for typechecker component of Informatics 2A Assignment 1.
 // Provides infrastructure for Micro-Haskell typechecking:
