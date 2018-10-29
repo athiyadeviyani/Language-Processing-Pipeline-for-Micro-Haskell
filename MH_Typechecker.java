@@ -1,5 +1,6 @@
 
 // File:   MH_Typechecker.java
+// Date:   October 2013
 
 // Java template file for typechecker component of Informatics 2A Assignment 1.
 // Provides infrastructure for Micro-Haskell typechecking:
@@ -24,17 +25,31 @@ class MH_Typechecker {
 	throws TypeError, UnknownVariable {
 
         // add code here
-
+		
 		if (exp.isVAR()) {
 			return env.typeOf(exp.value());
 		} 
 		
-		else if (exp.isBOOLEAN()) {
-			return BoolType;
-		} 
-
-		else if (exp.isVAR()) {
-			return IntegerType;
+    	else if (exp.isNUM()){
+    		return IntegerType;
+		}
+		
+    	else if (exp.isBOOLEAN()){
+    		return BoolType;
+    	}
+		
+		else if (exp.isAPP()) {
+			//Check if it is a function
+			if (computeType(exp.first(), env).isFun()) {
+				// Then compare if the argument type matches the declared type
+				if (computeType(exp.first(), env).left().equals(computeType(exp.second(), env))) {
+					return computeType(exp.first(), env).right();
+				} else {
+					throw new TypeError("Argument type does not match declared type.");
+				}
+			} else {
+				throw new TypeError("Not a function.");
+			}
 		}
 
 		else if (exp.isINFIX()) {
@@ -71,26 +86,11 @@ class MH_Typechecker {
 			} else {
 				throw new TypeError("If condition should be a boolean.");
 			}
-			
 		}
-
-
-		else if (exp.isAPP()) {
-			//Check if it is a function
-			if (computeType(exp.first(), env).isFun()) {
-				// Then compare if the argument type matches the declared type
-				if (computeType(exp.first(), env).left().equals(computeType(exp.second(), env))) {
-					return computeType(exp.first(), env).right();
-				} else {
-					throw new TypeError("Argument type does not match declared type.");
-				}
-			} else {
-				throw new TypeError("Arrow expected.");
-			}
-		}
-
-		return null;
-
+		
+    	else {
+    		throw new TypeError ("Expression not recognized.") ;
+    	}
     }
 
 
