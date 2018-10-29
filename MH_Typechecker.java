@@ -37,16 +37,16 @@ class MH_Typechecker {
 		
 		else if (exp.isAPP()) {
 			//Check if it is a function
-			//if (computeType(exp.first(), env).isFun()) {
+			if (computeType(exp.first(), env).isFun()) {
 				// Then compare if the argument type matches the declared type
 				if (computeType(exp.first(), env).left().equals(computeType(exp.second(), env))) {
 					return computeType(exp.first(), env).right();
 				} else {
 					throw new TypeError("Argument type does not match declared type.");
 				}
-			//} else {
-			//	throw new TypeError("Not a function.");
-			//}
+			} else {
+				throw new TypeError("Not a function.");
+			}
 		}
 
 		else if (exp.isINFIX()) {
