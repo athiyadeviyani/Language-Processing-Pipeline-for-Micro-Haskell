@@ -25,6 +25,34 @@ class MH_Typechecker {
 
         // add code here
 
+		if (exp.isVAR()) {
+			return env.typeOf(exp.value());
+		} 
+		
+		else if (exp.isBOOLEAN()) {
+			return BoolType;
+		} 
+
+		else if (exp.isVAR()) {
+			return IntegerType;
+		}
+
+		else if (exp.isINFIX()) {
+			// valid operands: + - == <=
+			// inputs have to be integers
+			// for + - output is integer
+			// for == <= output is boolean
+			// do it recursively (until you reach a base case)
+		}
+
+		else if (exp.isAPP()) {
+			// add code here
+		}
+
+		else if (exp.isIF()) {
+			// add code here
+		}
+
     }
 
 
