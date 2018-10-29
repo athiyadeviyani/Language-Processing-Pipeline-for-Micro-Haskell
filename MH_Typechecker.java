@@ -49,10 +49,10 @@ class MH_Typechecker {
 				} else if (exp.infixOp().equals("==") || exp.infixOf().equals("<=")) {
 					return BoolType;
 				} else {
-					throw new TypeError ("Wrong infix operator.");
+					throw new TypeError("Wrong infix operator.");
 				}
 			} else {
-				throw new TypeError ("Operation parameters should only be Integers.");
+				throw new TypeError("Operation parameters should only be Integers.");
 			}
 		}
 
@@ -63,19 +63,29 @@ class MH_Typechecker {
 				if (computeType(exp.second(), env).equals(computeType(exp.third(), env))) {
 					return computeType(exp.second(), env);
 				} else {
-					throw new TypeError ("Type of then and else should be the same.")
+					throw new TypeError("Type of then and else should be the same.")
 				}
 			} else {
-				throw new TypeError ("If condition should be a boolean.")
+				throw new TypeError("If condition should be a boolean.")
 			}
 			
 		}
 
 		else if (exp.isAPP()) {
-			// add code here
+			// Find arrow first
+			if (computeType(exp.first(), env).isArrow()) {
+				// Then compare if the argument type matches the declared type
+				if (computeType(exp.first(), env).left().equals(computeType(exp.second(), env))) {
+					return computeType(exp.first(), env).right();
+				} else {
+					throw new TypeError("Argument type does not match declared type.")
+				}
+			} else {
+				throw new TypeError("Arrow expected.")
+			}
 		}
 
-		
+		return null; 
 
     }
 
