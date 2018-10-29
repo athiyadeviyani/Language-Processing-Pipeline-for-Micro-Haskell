@@ -22,8 +22,7 @@ class MH_Typechecker {
     static MH_TYPE computeType (MH_EXP exp, TYPE_ENV env) 
 	throws TypeError, UnknownVariable {
 
-        // add code here
-		
+		// add code here
 		if (exp.isVAR()) {
 			return env.typeOf(exp.value());
 		} 
@@ -38,16 +37,16 @@ class MH_Typechecker {
 		
 		else if (exp.isAPP()) {
 			//Check if it is a function
-			if (computeType(exp.first(), env).isFun()) {
+			//if (computeType(exp.first(), env).isFun()) {
 				// Then compare if the argument type matches the declared type
 				if (computeType(exp.first(), env).left().equals(computeType(exp.second(), env))) {
 					return computeType(exp.first(), env).right();
 				} else {
 					throw new TypeError("Argument type does not match declared type.");
 				}
-			} else {
-				throw new TypeError("Not a function.");
-			}
+			//} else {
+			//	throw new TypeError("Not a function.");
+			//}
 		}
 
 		else if (exp.isINFIX()) {
@@ -56,7 +55,7 @@ class MH_Typechecker {
 			// for + - output is integer
 			// for == <= output is boolean
 			// do it recursively (until you reach a base case)
-			if (computeType(exp.first(), env).isInteger() && computeType(exp.first(), env).isInteger()) {
+			if (computeType(exp.first(), env).equals(IntegerType) && computeType(exp.first(), env).equals(IntegerType)) {
 				if (exp.infixOp().equals("+") || exp.infixOp().equals("-")) {
 					return IntegerType;
 				} else if (exp.infixOp().equals("==") || exp.infixOp().equals("<=")) {
@@ -87,8 +86,9 @@ class MH_Typechecker {
 		}
 		
     	else {
-    		throw new TypeError ("Expression not recognized.") ;
+    		return null;
     	}
+
     }
 
 
