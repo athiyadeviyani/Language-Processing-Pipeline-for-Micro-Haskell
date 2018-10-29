@@ -4,7 +4,6 @@
 // Java template file for parser component of Informatics 2A Assignment 1.
 // Students should add a method body for the LL(1) parse table for Micro-Haskell.
 
-// PARSE TABLE LINK (read-only, duh): https://drive.google.com/file/d/16_8iqk8rKp8CuaYBxqXFZArM2I73KeOL/view?usp=sharing
 
 import java.io.* ;
  
@@ -297,9 +296,9 @@ class MH_ParserDemo {
     static PARSER MH_Parser = new MH_Parser() ;
 
     public static void main (String[] args) throws Exception {
-	Reader reader = new BufferedReader (new FileReader (args[0])) ;
-	LEX_TOKEN_STREAM MH_Lexer = 
-	    new CheckedSymbolLexer (new MH_Lexer (reader)) ;
-	TREE theTree = MH_Parser.parseTokenStream (MH_Lexer) ;
+    Reader reader = new BufferedReader (new FileReader (args[0])) ;
+    LEX_TOKEN_STREAM MH_Lexer = 
+        new CheckedSymbolLexer (new MH_Lexer (reader)) ;
+    TREE theTree = MH_Parser.parseTokenStream (MH_Lexer) ;
     }
 }
